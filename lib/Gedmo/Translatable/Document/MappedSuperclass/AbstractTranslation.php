@@ -28,7 +28,7 @@ abstract class AbstractTranslation
     /**
      * @var string $objectClass
      *
-     * @MongoODM\String
+     * @MongoODM\String(name="object_class")
      */
     protected $objectClass;
 

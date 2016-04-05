@@ -473,7 +473,7 @@ class TranslatableListener extends MappedEventSubscriber
                 $translated = '';
                 foreach ((array) $result as $entry) {
                     if ($entry['field'] == $field) {
-                        $translated = $entry['content'];
+                        $translated = isset($entry['content']) ? $entry['content'] : null;
                         break;
                     }
                 }
@@ -516,7 +516,7 @@ class TranslatableListener extends MappedEventSubscriber
             throw new \Gedmo\Exception\InvalidArgumentException('Locale or language cannot be empty and must be set through Listener or Entity');
         }
     }
-    
+
     /**
      * Check if the given locale is valid
      *

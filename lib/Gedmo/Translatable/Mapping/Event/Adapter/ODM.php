@@ -71,7 +71,8 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
             }
             $q = $dm
                 ->createQueryBuilder($translationClass)
-                ->field('object.$id')->equals($wrapped->getIdentifier())
+                ->field(sprintf('object.%s', $wrapped->getMetadata()->identifier))
+                ->equals($wrapped->getIdentifier())
                 ->field('locale')->equals($locale)
                 ->getQuery()
             ;
@@ -108,7 +109,8 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
             ->limit(1)
         ;
         if ($this->usesPersonalTranslation($translationClass)) {
-            $qb->field('object.$id')->equals($wrapped->getIdentifier());
+            $qb->field(sprintf('object.%s', $wrapped->getMetadata()->identifier))
+                ->equals($wrapped->getIdentifier());
         } else {
             $qb->field('foreignKey')->equals($wrapped->getIdentifier());
             $qb->field('objectClass')->equals($objectClass);
@@ -133,7 +135,8 @@ final class ODM extends BaseAdapterODM implements TranslatableAdapter
             ->remove()
         ;
         if ($this->usesPersonalTranslation($transClass)) {
-            $qb->field('object.$id')->equals($wrapped->getIdentifier());
+            $qb->field(sprintf('object.%s', $wrapped->getMetadata()->identifier))
+                ->equals($wrapped->getIdentifier());
         } else {
             $qb->field('foreignKey')->equals($wrapped->getIdentifier());
             $qb->field('objectClass')->equals($objectClass);
