@@ -14,10 +14,10 @@ class User
     /** @ODM\Id */
     private $id;
 
-    /** @ODM\String */
+    /** @ODM\Field(type="string") */
     private $username;
 
-    /** @ODM\Date */
+    /** @ODM\Field(type="date") */
     protected $deletedAt;
 
     /**

@@ -11,20 +11,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Tag
 {
     /**
-     * @ODM\String()
+     * @ODM\Field(type="string")
      * @var string
      */
     protected $name;
 
     /**
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable(on="create")
      * @var \DateTime
      */
     protected $created;
 
     /**
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable
      * @var \DateTime
      */

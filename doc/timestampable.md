@@ -185,19 +185,19 @@ class Article
     private $id;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $title;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $body;
 
     /**
      * @var date $created
      *
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable(on="create")
      */
     private $created;
@@ -205,7 +205,7 @@ class Article
     /**
      * @var date $updated
      *
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable
      */
     private $updated;
@@ -213,7 +213,7 @@ class Article
     /**
      * @var \DateTime $contentChanged
      *
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable(on="change", field={"title", "body"})
      */
     private $contentChanged;
