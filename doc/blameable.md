@@ -187,7 +187,7 @@ class Article
     private $title;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $body;
 
@@ -280,14 +280,14 @@ class Article
     private $id;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $title;
 
     /**
      * @var string $createdBy
      *
-     * @ODM\String
+     * @ODM\Field(type="string")
      * @Gedmo\Blameable(on="create")
      */
     private $createdBy;
@@ -295,7 +295,7 @@ class Article
     /**
      * @var string $updatedBy
      *
-     * @ODM\String
+     * @ODM\Field(type="string")
      * @Gedmo\Blameable
      */
     private $updatedBy;

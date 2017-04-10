@@ -14,7 +14,7 @@ class Article
     private $id;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $title;
 
@@ -34,7 +34,7 @@ class Article
     /**
      * @var date $updated
      *
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable
      */
     private $updated;
@@ -42,21 +42,21 @@ class Article
     /**
      * @var date $published
      *
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable(on="change", field="type.title", value="Published")
      */
     private $published;
 
     /**
      * @var \DateTime
-     * @ODM\Date
+     * @ODM\Field(type="date")
      * @Gedmo\Timestampable(on="change", field="isReady", value=true)
      */
     private $ready;
 
     /**
      * @var bool
-     * @ODM\Boolean
+     * @ODM\Field(type="boolean")
      */
     private $isReady = false;
 
