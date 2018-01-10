@@ -2,6 +2,7 @@
 
 namespace Gedmo\SoftDeleteable;
 
+use SoftDeleteable\Fixture\Entity\UserNoHardDelete;
 use Tool\BaseTestCaseORM;
 use Doctrine\Common\EventManager;
 use SoftDeleteable\Fixture\Entity\Article;
@@ -35,6 +36,7 @@ class SoftDeleteableEntityTest extends BaseTestCaseORM
     const USER_CLASS = 'SoftDeleteable\Fixture\Entity\User';
     const MAPPED_SUPERCLASS_CHILD_CLASS = 'SoftDeleteable\Fixture\Entity\Child';
     const SOFT_DELETEABLE_FILTER_NAME = 'soft-deleteable';
+    const USER_NO_HARD_DELETE_CLASS = 'SoftDeleteable\Fixture\Entity\UserNoHardDelete';
 
     private $softDeleteableListener;
 
@@ -320,18 +322,20 @@ class SoftDeleteableEntityTest extends BaseTestCaseORM
 
     public function testPostSoftDeleteEventIsDispatched()
     {
-        $subscriber = $this->getMock(
-            "Doctrine\Common\EventSubscriber",
-            array(
+        $subscriber = $this->getMockBuilder("Doctrine\Common\EventSubscriber")
+            ->setMethods(array(
                 "getSubscribedEvents",
                 "preSoftDelete",
                 "postSoftDelete",
-            )
-        );
+            ))
+            ->getMock();
 
         $subscriber->expects($this->once())
                    ->method("getSubscribedEvents")
-                   ->will($this->returnValue(array(SoftDeleteableListener::PRE_SOFT_DELETE, SoftDeleteableListener::POST_SOFT_DELETE)));
+                   ->will($this->returnValue(array(
+                       SoftDeleteableListener::PRE_SOFT_DELETE,
+                       SoftDeleteableListener::POST_SOFT_DELETE
+                   )));
 
         $subscriber->expects($this->exactly(2))
                    ->method("preSoftDelete")
@@ -368,6 +372,42 @@ class SoftDeleteableEntityTest extends BaseTestCaseORM
         $this->em->flush();
     }
 
+    /**
+     * @test
+     */
+    public function shouldNotDeleteIfColumnNameDifferFromPropertyName()
+    {
+        $repo = $this->em->getRepository(self::USER_NO_HARD_DELETE_CLASS);
+
+        $newUser = new UserNoHardDelete();
+        $username = 'test_user';
+        $newUser->setUsername($username);
+
+        $this->em->persist($newUser);
+        $this->em->flush();
+
+        $user = $repo->findOneBy(array('username' => $username));
+
+        $this->assertNull($user->getDeletedAt());
+
+        $this->em->remove($user);
+        $this->em->flush();
+
+        $user = $repo->findOneBy(array('username' => $username));
+        $this->assertNull($user, "User should be filtered out");
+
+        // now deactivate filter and attempt to hard delete
+        $this->em->getFilters()->disable(self::SOFT_DELETEABLE_FILTER_NAME);
+        $user = $repo->findOneBy(array('username' => $username));
+        $this->assertNotNull($user, "User should be fetched when filter is disabled");
+
+        $this->em->remove($user);
+        $this->em->flush();
+
+        $user = $repo->findOneBy(array('username' => $username));
+        $this->assertNotNull($user, "User is still available, hard delete done");
+    }
+
     protected function getUsedEntityFixtures()
     {
         return array(
@@ -380,6 +420,7 @@ class SoftDeleteableEntityTest extends BaseTestCaseORM
             self::OTHER_ARTICLE_CLASS,
             self::OTHER_COMMENT_CLASS,
             self::MAPPED_SUPERCLASS_CHILD_CLASS,
+            self::USER_NO_HARD_DELETE_CLASS,
         );
     }
 }
