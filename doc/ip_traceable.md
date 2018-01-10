@@ -109,7 +109,7 @@ class Article
     private $updatedFromIp;
 
     /**
-     * @var datetime $contentChangedFromIp
+     * @var string $contentChangedFromIp
      *
      * @ORM\Column(nullable=true, length=45)
      * @Gedmo\IpTraceable(on="change", field={"title", "body"})
@@ -179,14 +179,14 @@ class Article
     private $id;
 
     /**
-     * @ODM\String
+     * @ODM\Field(type="string")
      */
     private $title;
 
     /**
      * @var string $createdFromIp
      *
-     * @ODM\String
+     * @ODM\Field(type="string")
      * @Gedmo\IpTraceable(on="create")
      */
     private $createdFromIp;
@@ -194,7 +194,7 @@ class Article
     /**
      * @var string $updatedFromIp
      *
-     * @ODM\String
+     * @ODM\Field(type="string")
      * @Gedmo\IpTraceable
      */
     private $updatedFromIp;
